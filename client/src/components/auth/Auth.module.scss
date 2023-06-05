@@ -25,10 +25,15 @@
       border: solid variables.$gray 2px;
       width: 290px;
       background: white;
+      &.validateError {
+        border: solid red 2px;
+        border-radius: 15px;
+      }
     }
   }
   .description {
     font-size: 0.8em;
     text-align: center;
+    margin: 10px 0px;
   }
 }
