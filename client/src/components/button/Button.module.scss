@@ -1,0 +1,17 @@
+@use "../../assets/variables.module";
+
+.button {
+  padding: 15px;
+  background: variables.$gray;
+  color: white;
+  border-radius: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  &:hover {
+    background: white;
+    color: gray;
+    transition-duration: 500ms;
+  }
+}
+
