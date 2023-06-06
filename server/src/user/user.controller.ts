@@ -12,4 +12,9 @@ export class UserController {
     async createUser(@Body() dto: CreateUserDto) {
         return await this.userService.createUser(dto)
     }
+
+    @Post('/signIn')
+    async signIn(@Body() dto: CreateUserDto) {
+        return await this.userService.signIn(dto)
+    }
 }

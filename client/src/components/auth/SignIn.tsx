@@ -3,7 +3,8 @@ import styles from './Auth.module.scss'
 import {routes} from "../appRouter/routeConstants";
 import {NavLink, useNavigate} from "react-router-dom";
 import {Validator} from "../../utillities/Validator";
-import {signUp} from "../../http/auth";
+import {useAppDispatch} from "../../hooks/useAppDispatch";
+import {signIn} from "../../store/actions/userAC/userAC";
 
 const SignIn = () => {
     const [email, setEmail] = useState<string>('')
@@ -11,12 +12,12 @@ const SignIn = () => {
     const [validate, setValidate]
         = useState<{email: ReturnType<typeof Validator.email>, password: ReturnType<typeof Validator.password>}>({email: {isValidate: true}, password: {isValidate: true}})
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
 
     const onClickHandler = (e: React.MouseEvent<HTMLInputElement>) => {
         if (!Validator.email(email).isValidate || !Validator.password(password, 8).isValidate)
             return setValidate({email: Validator.email(email), password: Validator.password(password, 8)})
-        signUp({email, password}).then(res => navigate('/'))
-            .catch(e => console.log(e))
+        dispatch(signIn({email, password}))
     }
     return (
         <div className={styles.container}>
