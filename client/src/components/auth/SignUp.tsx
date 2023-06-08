@@ -17,7 +17,7 @@ const SignUp = () => {
         if (!Validator.email(email).isValidate || !Validator.password(password, 8).isValidate)
             return setValidate({email: Validator.email(email), password: Validator.password(password, 8)})
         dispatch(signUp({email, password}))
-        navigate('/')
+            .then(() => navigate('/'))
     }
     return (
         <div className={styles.container}>

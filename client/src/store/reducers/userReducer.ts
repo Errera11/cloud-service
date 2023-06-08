@@ -13,10 +13,7 @@ export const userSlice = createSlice(
         initialState,
         reducers: {},
         extraReducers: builder => {
-            // builder.addCase(signIn.fulfilled, (state, action) => {
-            //     state.user = action.payload;
-            // })
-            builder.addCase(signUp.fulfilled, (state, action) => {
+            builder.addCase(signIn.fulfilled, (state, action) => {
                 state.isAuth = true;
                 state.user = action.payload;
             })

@@ -18,6 +18,7 @@ const SignIn = () => {
         if (!Validator.email(email).isValidate || !Validator.password(password, 8).isValidate)
             return setValidate({email: Validator.email(email), password: Validator.password(password, 8)})
         dispatch(signIn({email, password}))
+            .then(() => navigate('/'))
     }
     return (
         <div className={styles.container}>
