@@ -1,4 +1,4 @@
-import {Body, Controller, Inject, Post} from "@nestjs/common";
+import {Body, Controller, HttpException, Inject, Post} from "@nestjs/common";
 import {CreateUserDto} from "./types/userTypes";
 import {UserService} from "./user.service";
 
@@ -10,11 +10,21 @@ export class UserController {
 
     @Post('/signUp')
     async createUser(@Body() dto: CreateUserDto): Promise<any> {
-        return await this.userService.createUser(dto)
+        try {
+            return await this.userService.createUser(dto)
+        } catch (e) {
+            throw e
+        }
+
     }
 
     @Post('/signIn')
     async signIn(@Body() dto: CreateUserDto) {
-        return await this.userService.signIn(dto)
+        try {
+            return await this.userService.signIn(dto)
+        } catch (e) {
+            throw e
+        }
+
     }
 }

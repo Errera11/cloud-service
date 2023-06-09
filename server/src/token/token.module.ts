@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
   providers: [
       TokenService,
       JwtService
-  ]
+  ],
+    exports: [TokenService, JwtService]
 })
 export class TokenModule {}
