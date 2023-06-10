@@ -1,4 +1,4 @@
-import {HttpException, HttpStatus, Inject, Injectable} from "@nestjs/common";
+import {HttpException, HttpStatus, Inject, Injectable, UnauthorizedException} from "@nestjs/common";
 import {UserEntity} from "./User.entity";
 import { v4 as uuidv4 } from 'uuid';
 import {InjectModel} from "@nestjs/sequelize";
@@ -41,6 +41,20 @@ export class UserService {
         return {
             token,
             user
+        }
+    }
+
+    findUserById(id: string): Promise<UserEntity> {
+        return this.userRepository.findOne({where: {id}})
+    }
+
+    async auth(userData) {
+        const dbUser = await this.findUserById(userData.id)
+        if(!dbUser) throw UnauthorizedException
+        const token = await this.tokenService.signToken({email: userData.email, id: userData.id})
+        return {
+            user: dbUser,
+            token
         }
     }
 

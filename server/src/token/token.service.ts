@@ -9,6 +9,5 @@ export class TokenService {
         return this.jwtService.signAsync(payload, {
             secret: process.env.SECRET_ACCESS
         });
-
     }
 }
