@@ -1,4 +1,5 @@
-import {Column, DataType, Model, PrimaryKey, Table} from "sequelize-typescript";
+import {Column, DataType, HasMany, Model, Table} from "sequelize-typescript";
+import {FileEntity} from "../file/File.entity";
 
 @Table({tableName: 'user_rep'})
 export class UserEntity extends Model {
@@ -21,4 +22,6 @@ export class UserEntity extends Model {
     @Column({type: DataType.STRING, allowNull: true})
     image: string
 
+    @HasMany(() => FileEntity)
+    files: FileEntity[]
 }

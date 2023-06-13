@@ -1,6 +1,6 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 import {IInitialState, IUser} from "../actions/userAC/types";
-import {signIn, signUp} from "../actions/userAC/userAC";
+import {auth, signIn, signUp} from "../actions/userAC/userAC";
 
 const initialState: IInitialState = {
     error: '',
@@ -13,21 +13,23 @@ export const userSlice = createSlice(
         name: 'user',
         initialState,
         reducers: {
-            error: (state, action) => {
-                state.error = action.payload
+            logOut: state => {
+                localStorage.removeItem('token')
+                state.user = null
+                state.isAuth = false
             }
         },
         extraReducers: builder => {
-            builder.addCase(signIn.fulfilled || signUp.fulfilled, (state, action) => {
+            builder.addCase(signIn.fulfilled || signUp.fulfilled || auth.fulfilled, (state, action) => {
                 state.error = '';
                 state.user = (action.payload as unknown) as IUser;
                 state.isAuth = true;
             })
-            builder.addCase(signIn.rejected || signUp.rejected, (state, action) => {
+            builder.addCase(signIn.rejected || signUp.rejected || auth.rejected, (state, action) => {
+                localStorage.removeItem('token')
                 state.error = String(action.error.message);
             })
         }
     }
 )
 
-export const {error} = userSlice.actions

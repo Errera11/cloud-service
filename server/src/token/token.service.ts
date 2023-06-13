@@ -7,7 +7,8 @@ export class TokenService {
     constructor(private jwtService: JwtService) {}
     signToken(payload: {id: string, email: string}) {
         return this.jwtService.signAsync(payload, {
-            secret: process.env.SECRET_ACCESS
+            secret: process.env.SECRET_ACCESS,
+            expiresIn: '30m'
         });
     }
 }

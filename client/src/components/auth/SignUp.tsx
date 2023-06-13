@@ -5,7 +5,6 @@ import {NavLink, useNavigate} from "react-router-dom";
 import {Validator} from "../../utillities/Validator";
 import {signUp} from "../../store/actions/userAC/userAC";
 import {useAppDispatch} from "../../hooks/useAppDispatch";
-import {error} from "../../store/reducers/userReducer";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 
 const SignUp = () => {
@@ -22,7 +21,7 @@ const SignUp = () => {
         dispatch(signUp({email, password}))
             .unwrap()
             .then(() => navigate('/'))
-            .catch(e => error(e))
+            .catch(e => console.log(e))
     }
     return (
         <div className={styles.container}>

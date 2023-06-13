@@ -1,7 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {userActionTypes} from "./types";
-import Auth from "../../../http/auth";
-;
+import Auth from "../../../http/auth";;
 
 export const signIn
     = createAsyncThunk(userActionTypes.SET_USER,
@@ -32,3 +31,16 @@ export const signUp
             });
     })
 
+
+export const auth = createAsyncThunk(userActionTypes.SET_USER,
+    async() => {
+    return Auth.tokenAuth()
+        .then(response => {
+            console.log(response);
+            localStorage.setItem('token', `Bearer ${response.data.token}`)
+            return response.data.user
+        })
+        .catch(error => {
+            throw error.response.data.message
+        })
+    })

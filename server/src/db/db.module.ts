@@ -2,6 +2,7 @@ import {Module} from "@nestjs/common";
 import {Sequelize} from "sequelize-typescript";
 import * as process from "process";
 import {UserEntity} from "../user/User.entity";
+import {FileEntity} from "../file/File.entity";
 
 @Module({
     providers: [
@@ -15,7 +16,7 @@ import {UserEntity} from "../user/User.entity";
                 password: String(process.env.password),
                 database: process.env.database,
             });
-            sequelize.addModels([UserEntity]);
+            sequelize.addModels([UserEntity, FileEntity]);
             await sequelize.sync();
             return sequelize;
         },
@@ -31,7 +32,7 @@ import {UserEntity} from "../user/User.entity";
                 password: String(process.env.password),
                 database: process.env.database,
             });
-            sequelize.addModels([UserEntity]);
+            sequelize.addModels([UserEntity, FileEntity]);
             await sequelize.sync();
             return sequelize;
         },

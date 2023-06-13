@@ -8,8 +8,6 @@ const auth = axios.create({
 interface IResponse {
     user: IUser,
     token: string
-
-
 }
 
 const signUp = ({email, password}: { email: string, password: string }) => {
@@ -24,8 +22,12 @@ const signIn = ({email, password}: {
 
 }
 
+const tokenAuth = () => {
+    return auth.get<IResponse>('/user/auth', {headers: {'authorization': localStorage.getItem('token')}})
+}
+
 export default {
-    signIn, signUp
+    signIn, signUp, tokenAuth
 }
 
 //TODO interceptors

@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {InjectModel} from "@nestjs/sequelize";
 import {TokenService} from "../token/token.service";
 import * as bcrypt from 'bcrypt'
+import {FileService} from "../file/file.service";
 
 type IAuthProps = {
     status: number
@@ -13,7 +14,8 @@ type IAuthProps = {
 @Injectable()
 export class UserService {
     constructor(@InjectModel(UserEntity) private userRepository: typeof UserEntity,
-                private tokenService: TokenService) {
+                private tokenService: TokenService,
+                private fileService: FileService) {
     }
 
     async createUser(dto): Promise<IAuthProps> {
@@ -24,6 +26,7 @@ export class UserService {
         const hashedPassword = await bcrypt.hash(dto.password, 3)
         const user: UserEntity = await this.userRepository.create({...dto, id: randomId, password: hashedPassword})
         const token = await this.tokenService.signToken({id: user.id, email: user.email})
+        this.fileService.createDir({userId: user.id, path: '', type: 'dir'})
         return {
             token,
             user
