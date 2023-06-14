@@ -36,7 +36,6 @@ export const auth = createAsyncThunk(userActionTypes.SET_USER,
     async() => {
     return Auth.tokenAuth()
         .then(response => {
-            console.log(response);
             localStorage.setItem('token', `Bearer ${response.data.token}`)
             return response.data.user
         })

@@ -24,6 +24,9 @@ export class FileEntity extends Model {
     @Column({type: DataType.STRING})
     access_link: string
 
+    @Column({type: DataType.STRING})
+    path: string
+
     @ForeignKey(() => UserEntity)
     user_id: string
 
