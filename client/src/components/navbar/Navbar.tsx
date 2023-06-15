@@ -15,7 +15,7 @@ const Navbar = () => {
     return (
         <div className={styles.container}>
             <div className={styles.home} onClick={() => navigate(routes.HOME)}>
-                Home
+                Cloud
             </div>
             <div className={styles.auth}>
                 {isAuth ?

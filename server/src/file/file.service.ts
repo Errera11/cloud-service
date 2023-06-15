@@ -30,7 +30,9 @@ export class FileService {
 
     getFiles(userId, parentId) {
         try {
-            return this.fileRepository.findAll({where: {parentId, user_id: userId}})
+            return this.fileRepository.findAll(parentId ?
+                {where: {parentId, user_id: userId}} :
+                {where: {user_id: userId}})
         } catch (e) {
             throw e;
         }

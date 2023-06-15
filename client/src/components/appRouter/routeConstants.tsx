@@ -3,6 +3,7 @@ import React from "react";
 import SignUp from "../auth/SignUp";
 import Home from "../../pages/home/Home";
 import {Navigate} from "react-router-dom";
+import UserDisk from "../../pages/userDisk/UserDisk";
 
 export enum routes {
     SIGN_IN = '/signIn',
@@ -13,10 +14,10 @@ export enum routes {
 export const publicRoutes = [
     {path: routes.SIGN_IN, element: <SignIn />},
     {path: routes.SIGN_UP, element: <SignUp />},
-    {path: routes.HOME, element: <Home />},
-    {path: '/*', element: <Navigate to={'/'}/>},
+    {path: '/*', element: <Navigate to={routes.SIGN_UP}/>},
 ]
 
 export const privateRoutes = [
-    ...publicRoutes
+    {path: routes.HOME, element: <UserDisk />},
+    {path: '/*', element: <Navigate to={routes.HOME}/>},
 ]
