@@ -1,0 +1,28 @@
+
+.background {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(187,187,188,0.38);
+}
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: rgb(255,229,113);
+  padding: 30px;
+  border-radius: 15px;
+  z-index: 10;
+  * {
+    margin-bottom: 8px;
+    border: none;
+  }
+  input {
+    padding: 6px;
+    border-radius: 15px;
+  }
+}

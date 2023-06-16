@@ -15,3 +15,15 @@ export const setFiles = createAsyncThunk(
 
     }
 )
+
+export const createFile = createAsyncThunk(
+    FileActionTypes.CREATE_FILE,
+    async({fileName, parentId, type}: {fileName: string, parentId: string | null, type: string | null}) => {
+        try {
+            const response = await fileAPI.createFile(fileName, parentId, type)
+            return response.data
+        } catch (e) {
+            throw e
+        }
+    }
+)

@@ -1,6 +1,6 @@
 import {createSlice, current} from "@reduxjs/toolkit";
 import {IFilesInitialState} from "../actions/fileAC/types";
-import {setFiles} from "../actions/fileAC/fileAC";
+import {createFile, setFiles} from "../actions/fileAC/fileAC";
 
 const initialState: IFilesInitialState = {
     files: [],
@@ -19,6 +19,9 @@ export const fileSlice = createSlice(
             builder.addCase(setFiles.rejected, (state, payload) => {
                 console.log(payload.error);
                 //state.files = payload.files
+            })
+            builder.addCase(createFile.fulfilled, (state, payload) => {
+                state.files.push(payload.payload)
             })
         }
     }

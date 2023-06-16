@@ -12,7 +12,13 @@ file.interceptors.request.use(config => {
 })
 
 const getFiles = () => file.get<IFile[]>('file')
+const createFile = (fileName: string, parentId: string | null, type: string | null) => file.post<IFile>('file', {
+    name: fileName,
+    parentId,
+    type
+})
 
 export const fileAPI = {
-    getFiles
+    getFiles,
+    createFile
 }
