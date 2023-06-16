@@ -1,4 +1,4 @@
-import {createSlice, current} from "@reduxjs/toolkit";
+import {createSlice, current, PayloadAction} from "@reduxjs/toolkit";
 import {IFilesInitialState} from "../actions/fileAC/types";
 import {createFile, setFiles} from "../actions/fileAC/fileAC";
 
@@ -11,7 +11,11 @@ export const fileSlice = createSlice(
     {
         initialState,
         name: 'file',
-        reducers: {},
+        reducers: {
+            setDirectory: (state, action: PayloadAction<string>) => {
+                state.currentDir = action.payload
+            }
+        },
         extraReducers: builder => {
             builder.addCase(setFiles.fulfilled, (state, payload) => {
                 state.files = payload.payload
@@ -26,3 +30,5 @@ export const fileSlice = createSlice(
         }
     }
 )
+
+export const {setDirectory} = fileSlice.actions

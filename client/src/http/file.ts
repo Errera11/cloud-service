@@ -11,10 +11,10 @@ file.interceptors.request.use(config => {
     return config
 })
 
-const getFiles = () => file.get<IFile[]>('file')
-const createFile = (fileName: string, parentId: string | null, type: string | null) => file.post<IFile>('file', {
+const getFiles = (parent: string) => file.get<IFile[]>('file', {params: {parent}})
+const createFile = (fileName: string, parent: string | null, type: string | null) => file.post<IFile>('file', {
     name: fileName,
-    parentId,
+    parent,
     type
 })
 

@@ -4,11 +4,12 @@ import styles from './userDiskItem.module.scss';
 import fileImage from './../../assets/file.png';
 import dirImage from './../../assets/directory.png';
 
-const UserDiskItem: React.FC<{files: IFile[]}> = ({files}) => {
+const UserDiskItem: React.FC<{files: IFile[], onClick: Function}> = ({files, onClick}) => {
     return (
         <>
             {files.map(item => <>
-                <div className={styles.img}>
+                <div onClick={() => onClick(item.id)}
+                    className={styles.img}>
                     <div className={styles.border}/>
                     {item.type == 'dir' ?
                         <img src={dirImage}/> :
