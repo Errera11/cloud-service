@@ -1,13 +1,11 @@
 import {forwardRef, Module} from "@nestjs/common";
 import {UserController} from "./user.controller";
 import {UserService} from "./user.service";
-import {DbModule} from "../db/db.module";
 import {UserEntity} from "./User.entity";
 import {TokenModule} from "../token/token.module";
-import {AuthMiddleware} from "../middlewares/auth.middleware";
-import {FileService} from "../file/file.service";
 import {FileModule} from "../file/file.module";
-import {FileEntity} from "../file/File.entity";
+import {FileService} from "../file/file.service";
+import {DbModule} from "../db/db.module";
 
 @Module({
     controllers: [UserController],
@@ -15,10 +13,10 @@ import {FileEntity} from "../file/File.entity";
     providers: [
         {
             provide: 'UserEntityRepository',
-            useClass: UserEntity
+            useValue: UserEntity
         },
-        UserService,
+        UserService
     ],
-    exports: [UserService]
+    exports: [UserService, ]
 })
 export class UserModule {}

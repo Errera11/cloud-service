@@ -7,6 +7,7 @@ import {UserService} from "../user/user.service";
 import {UserEntity} from "../user/User.entity";
 import {TokenModule} from "../token/token.module";
 import {TokenService} from "../token/token.service";
+import {DbModule} from "../db/db.module";
 
 
 @Module({
@@ -14,10 +15,10 @@ import {TokenService} from "../token/token.service";
     providers: [
         {
             provide: 'FileEntityRepository',
-            useClass: FileEntity
-        }, FileService,],
+            useValue: FileEntity
+        }, FileService],
     controllers: [FileController],
-    exports: [FileService]
+    exports: [FileService, ]
 })
 export class FileModule {
 }
