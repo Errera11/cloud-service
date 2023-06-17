@@ -1,4 +1,4 @@
-import {HttpException, HttpStatus, Inject, Injectable, UnauthorizedException} from "@nestjs/common";
+import {forwardRef, HttpException, HttpStatus, Inject, Injectable, UnauthorizedException} from "@nestjs/common";
 import {UserEntity} from "./User.entity";
 import { v4 as uuidv4 } from 'uuid';
 import {InjectModel} from "@nestjs/sequelize";
@@ -15,7 +15,7 @@ type IAuthProps = {
 export class UserService {
     constructor(@InjectModel(UserEntity) private userRepository: typeof UserEntity,
                 private tokenService: TokenService,
-                private fileService: FileService) {
+                @Inject(forwardRef(() => FileService)) private fileService: FileService) {
     }
 
     async createUser(dto): Promise<IAuthProps> {
@@ -26,7 +26,7 @@ export class UserService {
         const hashedPassword = await bcrypt.hash(dto.password, 3)
         const user: UserEntity = await this.userRepository.create({...dto, id: randomId, password: hashedPassword})
         const token = await this.tokenService.signToken({id: user.id, email: user.email})
-        this.fileService.createFile({userId: user.id, path: '', type: 'dir'})
+        this.fileService.createDir({userId: user.id, path: '', type: 'dir'})
         return {
             token,
             user

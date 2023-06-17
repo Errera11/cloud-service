@@ -1,8 +1,9 @@
-import {Module} from "@nestjs/common";
+import {MiddlewareConsumer, Module, NestModule} from "@nestjs/common";
 import {DbModule} from "./db/db.module";
 import {UserModule} from "./user/user.module";
 import { TokenModule } from './token/token.module';
 import {FileModule} from "./file/file.module";
+import {AuthMiddleware} from "./middlewares/auth.middleware";
 
 @Module({
     imports: [
@@ -12,4 +13,11 @@ import {FileModule} from "./file/file.module";
         FileModule
     ],
 })
-export class AppModule {}
+export class AppModule implements NestModule{
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(AuthMiddleware)
+            .forRoutes("user/auth", "file")
+
+    }
+}

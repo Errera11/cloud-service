@@ -2,7 +2,8 @@
 
 export interface IFilesInitialState {
     files: IFile[],
-    currentDir: string
+    currentDir: string,
+    error: string
 }
 
 export interface IFile {

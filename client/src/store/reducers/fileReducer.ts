@@ -1,10 +1,12 @@
 import {createSlice, current, PayloadAction} from "@reduxjs/toolkit";
 import {IFilesInitialState} from "../actions/fileAC/types";
 import {createFile, setFiles} from "../actions/fileAC/fileAC";
+import {auth, signIn, signUp} from "../actions/userAC/userAC";
 
 const initialState: IFilesInitialState = {
     files: [],
-    currentDir: ''
+    currentDir: '',
+    error: ''
 }
 
 export const fileSlice = createSlice(
@@ -13,6 +15,7 @@ export const fileSlice = createSlice(
         name: 'file',
         reducers: {
             setDirectory: (state, action: PayloadAction<string>) => {
+                console.log(action.payload);
                 state.currentDir = action.payload
             }
         },
@@ -26,6 +29,10 @@ export const fileSlice = createSlice(
             })
             builder.addCase(createFile.fulfilled, (state, payload) => {
                 state.files.push(payload.payload)
+            })
+            builder.addCase(createFile.rejected || setFiles.rejected, (state, action) => {
+                localStorage.removeItem('token')
+                state.error = String(action.error.message);
             })
         }
     }

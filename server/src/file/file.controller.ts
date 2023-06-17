@@ -1,7 +1,18 @@
-import {BadRequestException, Body, Controller, Get, Post, Query, Req} from "@nestjs/common";
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Get,
+    Post,
+    Query,
+    Req,
+    UploadedFile,
+    UseInterceptors
+} from "@nestjs/common";
 import {FileDto} from "./dto/File.Dto";
 import {FileService} from "./file.service";
 import {FileEntity} from "./File.entity";
+import {FileInterceptor} from "@nestjs/platform-express";
 
 @Controller('file')
 export class FileController {
@@ -9,9 +20,9 @@ export class FileController {
     }
 
     @Post('')
-    async createFile(@Req() req: Request, @Body() file: FileDto): Promise<FileEntity> {
+    async createDir(@Req() req: Request, @Body() file: FileDto): Promise<FileEntity> {
         try {
-            return await this.fileService.createFile({...file, userId: req.headers['user'].id})
+            return await this.fileService.createDir({...file, userId: req.headers['user'].id})
         } catch (e) {
             throw new BadRequestException('File already exists');
         }
@@ -26,6 +37,17 @@ export class FileController {
             throw e
         }
 
+    }
+
+    @Post('create')
+    @UseInterceptors(FileInterceptor('file'))
+    async createFile(@Req() req: Request, @UploadedFile() file, @Body('parent') parent: string) {
+        try {
+            console.log(file);
+            //return await this.fileService.createFile(file, req.headers['authorization'], parent);
+        } catch (e) {
+            throw e
+        }
     }
 
 }

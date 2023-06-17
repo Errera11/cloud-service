@@ -5,6 +5,7 @@ import fileImage from './../../assets/file.png';
 import dirImage from './../../assets/directory.png';
 
 const UserDiskItem: React.FC<{files: IFile[], onClick: Function}> = ({files, onClick}) => {
+    console.log('child');
     return (
         <>
             {files.map(item => <>
@@ -29,4 +30,4 @@ const UserDiskItem: React.FC<{files: IFile[], onClick: Function}> = ({files, onC
     );
 };
 
-export default UserDiskItem;
+export default React.memo(UserDiskItem);
