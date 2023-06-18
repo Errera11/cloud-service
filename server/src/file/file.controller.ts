@@ -43,9 +43,9 @@ export class FileController {
     @UseInterceptors(FileInterceptor('file'))
     async createFile(@Req() req: Request, @UploadedFile() file, @Body('parent') parent: string) {
         try {
-            console.log(file);
-            //return await this.fileService.createFile(file, req.headers['authorization'], parent);
+            return await this.fileService.createFile(file, req.headers['user'].id,  parent);
         } catch (e) {
+            console.log(e);
             throw e
         }
     }

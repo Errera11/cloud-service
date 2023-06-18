@@ -62,4 +62,8 @@ export class UserService {
         }
     }
 
+    updateUser(id, data) {
+        return this.userRepository.update({...data}, {where: {id}, returning: true})
+    }
+
 }

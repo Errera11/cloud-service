@@ -19,5 +19,6 @@ export interface IFile {
 
 export enum FileActionTypes {
     SET_FILES = 'SET_FILES',
-    CREATE_FILE = 'CREATE_FILE'
+    CREATE_FILE = 'CREATE_FILE',
+    CREATE_DIR = 'CREATE_DIR'
 }

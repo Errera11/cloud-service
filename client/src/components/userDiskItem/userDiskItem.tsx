@@ -30,4 +30,4 @@ const UserDiskItem: React.FC<{files: IFile[], onClick: Function}> = ({files, onC
     );
 };
 
-export default React.memo(UserDiskItem);
+export default UserDiskItem;

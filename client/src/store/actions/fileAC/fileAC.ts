@@ -16,13 +16,25 @@ export const setFiles = createAsyncThunk(
     }
 )
 
-export const createFile = createAsyncThunk(
-    FileActionTypes.CREATE_FILE,
+export const createDir = createAsyncThunk(
+    FileActionTypes.CREATE_DIR,
     async({fileName, parent, type}: {fileName: string, parent: string | null, type: string | null}) => {
         try {
-            const response = await fileAPI.createFile(fileName, parent, type)
+            const response = await fileAPI.createDir(fileName, parent, type)
             return response.data
         } catch (e) {
+            throw e
+        }
+    }
+)
+
+export const createFile = createAsyncThunk(
+    FileActionTypes.CREATE_FILE,
+    async (form: FormData) => {
+        try {
+            const response = await fileAPI.createFile(form)
+            return response.data
+        } catch(e) {
             throw e
         }
     }

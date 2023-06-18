@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import styles from './UserDisk.module.scss'
 import {useAppDispatch} from "../../hooks/useAppDispatch";
-import {setFiles} from "../../store/actions/fileAC/fileAC";
+import {createFile, setFiles} from "../../store/actions/fileAC/fileAC";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import UserDiskItem from "../../components/userDiskItem/userDiskItem";
 import CreateFileModal from "../../components/createFileModal/CreateFileModal";
@@ -18,7 +18,6 @@ const UserDisk = () => {
     }, [])
 
     useEffect(() => {
-        console.log('rerender');
         dispatch(setFiles(currentDir))
             .unwrap()
             .then(res => console.log(res))
@@ -39,16 +38,24 @@ const UserDisk = () => {
         dispatch(setDirectory(dir))
     }
 
-    const createFile = document.createElement('input')
-    createFile.addEventListener('change', (event) => {
-        console.log('1');
+    const fileInputElement = document.createElement('input')
+    fileInputElement.type = 'file';
+    fileInputElement.addEventListener('change', (event: Event) => {
+        const file = (event.target as HTMLInputElement).files![0];
+        const form = new FormData()
+        form.append('file', file)
+        form.append('parent', currentDir)
+        dispatch(createFile(form))
+            .unwrap()
+            .then(res => console.log(res))
+            .catch(e => console.log(e));
     })
 
     return (
         <div className={styles.container}>
             <div style={{cursor: 'pointer'}} onClick={() => setIsModal(true)}>Create directory</div>
             <div style={{cursor: 'pointer'}} onClick={() => backDirStep()}>Previous directory</div>
-            <div style={{cursor: 'pointer'}} onClick={() => createFile.click()}>Upload File</div>
+            <div style={{cursor: 'pointer'}} onClick={() => fileInputElement.click()}>Upload File</div>
             <div className={styles.info}>
                 <div className={styles.name}>Name</div>
                 <div>Date</div>

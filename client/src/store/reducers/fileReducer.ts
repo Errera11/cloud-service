@@ -1,6 +1,6 @@
 import {createSlice, current, PayloadAction} from "@reduxjs/toolkit";
 import {IFilesInitialState} from "../actions/fileAC/types";
-import {createFile, setFiles} from "../actions/fileAC/fileAC";
+import {createFile, createDir, setFiles} from "../actions/fileAC/fileAC";
 import {auth, signIn, signUp} from "../actions/userAC/userAC";
 
 const initialState: IFilesInitialState = {
@@ -23,14 +23,10 @@ export const fileSlice = createSlice(
             builder.addCase(setFiles.fulfilled, (state, payload) => {
                 state.files = payload.payload
             })
-            builder.addCase(setFiles.rejected, (state, payload) => {
-                console.log(payload.error);
-                //state.files = payload.files
-            })
-            builder.addCase(createFile.fulfilled, (state, payload) => {
+            builder.addCase(createDir.fulfilled || createFile.fulfilled, (state, payload) => {
                 state.files.push(payload.payload)
             })
-            builder.addCase(createFile.rejected || setFiles.rejected, (state, action) => {
+            builder.addCase(createDir.rejected || setFiles.rejected || setFiles.rejected, (state, action) => {
                 localStorage.removeItem('token')
                 state.error = String(action.error.message);
             })

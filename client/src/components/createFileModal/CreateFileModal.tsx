@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styles from './createFileModal.module.scss'
 import {useAppDispatch} from "../../hooks/useAppDispatch";
-import {createFile} from "../../store/actions/fileAC/fileAC";
+import {createDir} from "../../store/actions/fileAC/fileAC";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 interface IProps {
     isActive: boolean,
@@ -13,7 +13,7 @@ const CreateFileModal: React.FC<IProps> = ({isActive, setIsActive}) => {
     const dispatch = useAppDispatch()
     const currentDir = useTypedSelector(state => state.file.currentDir)
     const createHandler = (e: React.MouseEvent<HTMLInputElement>) => {
-        dispatch(createFile({fileName: name, type: '', parent: currentDir}))
+        dispatch(createDir({fileName: name, type: '', parent: currentDir}))
             .unwrap()
             .then(() => setIsActive(false))
     }

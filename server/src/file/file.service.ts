@@ -48,18 +48,24 @@ export class FileService {
 
     async createFile(file, userId, parent) {
         try {
+            const fileSize = Math.round(file.size / 1024)
             const user = await this.userService.findUserById(userId)
-            const fileType = file.name.split('.').slice(-1)[0]
-            if (await this.fileRepository.findOne({where: {user_id: userId, name: file.name}})) {
+            if(fileSize + user.usedSpace > user.diskSpace) throw new BadRequestException('Cloud is full!')
+            const fileType = file.originalname.split('.').slice(-1)[0]
+            const filename = file.originalname.split('.').slice(0, -1)[0]
+            if (await this.fileRepository.findOne({where: {user_id: userId, name: file.originalname}})) {
                 throw new BadRequestException('File already exists');
             }
             let filePath: string;
             if (parent) {
-                const parentFile = await this.fileRepository.findOne({where: {id: file.name}})
-                filePath = path.resolve(parentFile.path, file.name)
-            } else filePath = path.resolve(__dirname, '..', '..', 'files', file.userId, file.name)
-            fs.writeFileSync(filePath, file)
-            this.fileRepository.create({name: file.name, type: fileType})
+                const parentFile = await this.fileRepository.findOne({where: {id: parent}})
+                filePath = path.resolve(parentFile.path, file.originalname)
+            } else filePath = path.resolve(__dirname, '..', '..', 'files', userId, file.originalname)
+            fs.writeFileSync(filePath, file.buffer)
+            const createdFile
+                = await this.fileRepository.create({user_id: userId, path: filePath, parentId: parent, name: filename, type: fileType, size: fileSize})
+            this.userService.updateUser(userId, {usedSpace: user.usedSpace + fileSize} )
+            return createdFile;
         } catch (e) {
             throw e;
         }

@@ -8,15 +8,12 @@ export class FileEntity extends Model {
     @Column({type: DataType.INTEGER, primaryKey: true, autoIncrement: true})
     id: number
 
-    @Column({type: DataType.INTEGER, defaultValue: 0})
+    @Column({type: DataType.REAL, defaultValue: 0})
     size: number
 
     @Column({type: DataType.STRING})
     @ForeignKey(() => FileEntity)
     parentId: string
-
-    // @Column({type: DataType.STRING})
-    // childId: string[]
 
     @Column({type: DataType.STRING})
     name: string
