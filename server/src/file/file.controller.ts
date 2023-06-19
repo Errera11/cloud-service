@@ -22,8 +22,10 @@ export class FileController {
     @Post('')
     async createDir(@Req() req: Request, @Body() file: FileDto): Promise<FileEntity> {
         try {
+            console.log(file);
             return await this.fileService.createDir({...file, userId: req.headers['user'].id})
         } catch (e) {
+            console.log(e);
             throw new BadRequestException('File already exists');
         }
 

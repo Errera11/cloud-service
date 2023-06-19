@@ -27,7 +27,7 @@ export class UserService {
         const hashedPassword = await bcrypt.hash(dto.password, 3)
         const user: UserEntity = await this.userRepository.create({...dto, id: randomId, password: hashedPassword})
         const token = await this.tokenService.signToken({id: user.id, email: user.email})
-        this.fileService.createDir({userId: user.id, path: '', type: 'dir'})
+        this.fileService.createDir({userId: user.id, path: '', type: 'user reg'})
         return {
             token,
             user

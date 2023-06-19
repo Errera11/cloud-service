@@ -15,7 +15,6 @@ export const fileSlice = createSlice(
         name: 'file',
         reducers: {
             setDirectory: (state, action: PayloadAction<string>) => {
-                console.log(action.payload);
                 state.currentDir = action.payload
             }
         },
@@ -23,11 +22,16 @@ export const fileSlice = createSlice(
             builder.addCase(setFiles.fulfilled, (state, payload) => {
                 state.files = payload.payload
             })
-            builder.addCase(createDir.fulfilled || createFile.fulfilled, (state, payload) => {
+            builder.addCase(createDir.fulfilled , (state, payload) => {
+                console.log(payload);
+                state.files.push(payload.payload)
+            })
+            builder.addCase( createFile.fulfilled, (state, payload) => {
+                console.log(payload);
                 state.files.push(payload.payload)
             })
             builder.addCase(createDir.rejected || setFiles.rejected || setFiles.rejected, (state, action) => {
-                localStorage.removeItem('token')
+                console.log(action);
                 state.error = String(action.error.message);
             })
         }

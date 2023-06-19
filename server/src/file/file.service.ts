@@ -16,12 +16,15 @@ export class FileService {
     async createDir(file) {
         try {
             let filePath: string;
-            if (file.parent) {
+            if (file.parent && !(typeof file.parent == 'string')) {
                 const parentFile = await this.fileRepository.findOne({where: {id: file.parent}})
                 filePath = path.resolve(parentFile.path, file.name)
-            } else filePath = path.resolve(__dirname, '..', '..', 'files', file.userId, file.name)
+            } else {
+                filePath = path.resolve(__dirname, '..', '..', 'files', file.userId, file?.name || '')
+            }
             if (!fs.existsSync(filePath)) {
                 fs.mkdirSync(filePath)
+                if(file.type == 'user reg') return
                 return this.fileRepository.create({
                     user_id: file.userId,
                     path: filePath,
@@ -57,7 +60,7 @@ export class FileService {
                 throw new BadRequestException('File already exists');
             }
             let filePath: string;
-            if (parent) {
+            if (parent && !(typeof parent == 'string')) {
                 const parentFile = await this.fileRepository.findOne({where: {id: parent}})
                 filePath = path.resolve(parentFile.path, file.originalname)
             } else filePath = path.resolve(__dirname, '..', '..', 'files', userId, file.originalname)

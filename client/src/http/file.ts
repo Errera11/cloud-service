@@ -17,7 +17,7 @@ const createDir = (fileName: string, parent: string | null, type: string | null)
     parent,
     type
 })
-const createFile = (form: any) => file.post('file/create', form)
+const createFile = (form: FormData) => file.post('file/create', form)
 
 export const fileAPI = {
     getFiles,

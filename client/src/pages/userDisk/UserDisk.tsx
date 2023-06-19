@@ -47,7 +47,10 @@ const UserDisk = () => {
         form.append('parent', currentDir)
         dispatch(createFile(form))
             .unwrap()
-            .then(res => console.log(res))
+            .then(res => {
+                console.log(files);
+                return console.log(res)
+            })
             .catch(e => console.log(e));
     })
 
