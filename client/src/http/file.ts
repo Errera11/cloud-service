@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosRequestConfig} from "axios";
 import {IFile} from "../store/actions/fileAC/types";
 
 
@@ -17,7 +17,11 @@ const createDir = (fileName: string, parent: string | null, type: string | null)
     parent,
     type
 })
-const createFile = (form: FormData) => file.post('file/create', form)
+const createFile = (form: FormData) => file.post('file/create', form, {
+    onUploadProgress: progressEvent => {
+        console.log(progressEvent);
+    }
+})
 
 export const fileAPI = {
     getFiles,

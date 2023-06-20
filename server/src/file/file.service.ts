@@ -56,7 +56,7 @@ export class FileService {
             if(fileSize + user.usedSpace > user.diskSpace) throw new BadRequestException('Cloud is full!')
             const fileType = file.originalname.split('.').slice(-1)[0]
             const filename = file.originalname.split('.').slice(0, -1)[0]
-            if (await this.fileRepository.findOne({where: {user_id: userId, name: file.originalname}})) {
+            if (await this.fileRepository.findOne({where: {user_id: userId, name: filename}})) {
                 throw new BadRequestException('File already exists');
             }
             let filePath: string;

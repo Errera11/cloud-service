@@ -9,11 +9,11 @@ const UserDiskItem: React.FC<{files: IFile[], onClick: Function}> = ({files, onC
     return (
         <>
             {files.map(item => <>
-                <div onClick={() => onClick(item.id)}
+                <div
                     className={styles.img}>
                     <div className={styles.border}/>
                     {item.type == 'dir' ?
-                        <img src={dirImage}/> :
+                        <img onClick={() => onClick(item.id)} src={dirImage}/> :
                         <img src={fileImage}/>}
                 </div>
                 <div className={styles.name}>

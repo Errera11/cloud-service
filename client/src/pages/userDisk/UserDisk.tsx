@@ -6,6 +6,7 @@ import {useTypedSelector} from "../../hooks/useTypedSelector";
 import UserDiskItem from "../../components/userDiskItem/userDiskItem";
 import CreateFileModal from "../../components/createFileModal/CreateFileModal";
 import {setDirectory} from "../../store/reducers/fileReducer";
+import Button from "../../components/button/Button";
 
 const UserDisk = () => {
     const dispatch = useAppDispatch()
@@ -47,18 +48,39 @@ const UserDisk = () => {
         form.append('parent', currentDir)
         dispatch(createFile(form))
             .unwrap()
-            .then(res => {
-                console.log(files);
-                return console.log(res)
-            })
+            .then(res => console.log(res))
             .catch(e => console.log(e));
     })
 
+    const [isDrag, setIsDrag] = useState(false)
+    const fileDropHandler = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const form = new FormData()
+        form.append('file', e.dataTransfer.files[0])
+        form.append('parent', currentDir)
+        dispatch(createFile(form))
+        setIsDrag(false)
+    }
+
+    const onDragOverHandler = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+        setIsDrag(true)
+    }
+
+    const onDragLeaveHandler = (e: React.DragEvent<HTMLDivElement>) => {
+        e.stopPropagation()
+        setIsDrag(false)
+    }
+
     return (
-        <div className={styles.container}>
-            <div style={{cursor: 'pointer'}} onClick={() => setIsModal(true)}>Create directory</div>
-            <div style={{cursor: 'pointer'}} onClick={() => backDirStep()}>Previous directory</div>
-            <div style={{cursor: 'pointer'}} onClick={() => fileInputElement.click()}>Upload File</div>
+        <div onDragOver={(e ) => onDragOverHandler(e)} onDragLeave={(e) => onDragLeaveHandler(e)} className={styles.container}>
+            <div className={styles.interact}>
+                <Button onClick={() => setIsModal(true)}>Create directory</Button>
+                <Button onClick={() => backDirStep()}>Previous directory</Button>
+                <Button onClick={() => fileInputElement.click()}>Upload File</Button>
+            </div>
             <div className={styles.info}>
                 <div className={styles.name}>Name</div>
                 <div>Date</div>
@@ -69,7 +91,10 @@ const UserDisk = () => {
                     onClick={setDir}
                     files={files}/>
             </div>
-            {isModal && <CreateFileModal isActive={isModal} setIsActive={setIsModal} /> }
+            {isModal && <CreateFileModal isActive={isModal} setIsActive={setIsModal}/>}
+            {isDrag && <div className={styles.dropArea} onDrop={(event) => fileDropHandler(event)}>
+                Drop your file here!
+            </div>}
         </div>
     );
 };
