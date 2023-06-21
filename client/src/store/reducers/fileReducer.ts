@@ -1,6 +1,6 @@
 import {createSlice, current, PayloadAction} from "@reduxjs/toolkit";
 import {IFilesInitialState} from "../actions/fileAC/types";
-import {createFile, createDir, setFiles} from "../actions/fileAC/fileAC";
+import {createFile, createDir, setFiles, deleteFile} from "../actions/fileAC/fileAC";
 import {auth, signIn, signUp} from "../actions/userAC/userAC";
 
 const initialState: IFilesInitialState = {
@@ -19,21 +19,23 @@ export const fileSlice = createSlice(
             }
         },
         extraReducers: builder => {
-            builder.addCase(setFiles.fulfilled, (state, payload) => {
-                state.files = payload.payload
+            builder.addCase(setFiles.fulfilled, (state, action) => {
+                state.files = action.payload
             })
-            builder.addCase(createDir.fulfilled , (state, payload) => {
-                console.log(payload);
-                state.files.push(payload.payload)
+            builder.addCase(createDir.fulfilled , (state, action) => {
+                state.files.push(action.payload)
             })
-            builder.addCase( createFile.fulfilled, (state, payload) => {
-                console.log(payload);
-                state.files.push(payload.payload)
+            builder.addCase( createFile.fulfilled, (state, action) => {
+                state.files.push(action.payload)
+            })
+            builder.addCase( deleteFile.fulfilled, (state, action) => {
+                console.log(action);
+                state.files = state.files.filter(file => file.id !== action.payload)
             })
             builder.addCase(createDir.rejected || setFiles.rejected || setFiles.rejected, (state, action) => {
-                console.log(action);
                 state.error = String(action.error.message);
             })
+
         }
     }
 )

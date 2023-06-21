@@ -60,7 +60,7 @@ export class FileService {
                 throw new BadRequestException('File already exists');
             }
             let filePath: string;
-            if (parent && !(typeof parent == 'string')) {
+            if (Number(parent)) {
                 const parentFile = await this.fileRepository.findOne({where: {id: parent}})
                 filePath = path.resolve(parentFile.path, file.originalname)
             } else filePath = path.resolve(__dirname, '..', '..', 'files', userId, file.originalname)
@@ -81,5 +81,17 @@ export class FileService {
         const filePath = file.path;
         return fs.createReadStream(filePath)
 
+    }
+
+    async deleteFile(fileId) {
+        const file = await this.fileRepository.findOne({where: {id: fileId}})
+        if(!file) return new BadRequestException('File does not exist')
+        if(fs.lstatSync(file.path).isDirectory) {
+            fs.rmSync(file.path, {recursive: true})
+        } else {
+            fs.unlink(file.path)
+        }
+        this.fileRepository.destroy({where: {id: fileId}})
+        return 'File deleted'
     }
 }

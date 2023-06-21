@@ -1,7 +1,7 @@
 import {
     BadRequestException,
     Body,
-    Controller,
+    Controller, Delete,
     Get,
     Post,
     Query,
@@ -56,5 +56,10 @@ export class FileController {
     async downloadFile(@Query('id') id: string, @Req() req: Request) {
         const file = await this.fileService.downloadFile(req.headers['user'].id, id)
         return new StreamableFile(file)
+    }
+
+    @Delete('delete')
+    async deleteFile(@Query('id') id: string) {
+        return await this.fileService.deleteFile(id)
     }
 }

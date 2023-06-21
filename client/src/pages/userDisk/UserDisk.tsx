@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import styles from './UserDisk.module.scss'
 import {useAppDispatch} from "../../hooks/useAppDispatch";
-import {createFile, setFiles} from "../../store/actions/fileAC/fileAC";
+import {createFile, deleteFile, setFiles} from "../../store/actions/fileAC/fileAC";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import UserDiskItem from "../../components/userDiskItem/userDiskItem";
 import CreateFileModal from "../../components/createFileModal/CreateFileModal";
@@ -75,12 +75,15 @@ const UserDisk = () => {
         setIsDrag(false)
     }
 
-    const downloadFileHandler = async (id: string, fileName: string, fileExt: string) => {
+    const onDownloadFileHandler = async (id: string, fileName: string, fileExt: string) => {
         const {data: blob} =  await fileAPI.downloadFile(id)
         const link = document.createElement('a')
         link.href = URL.createObjectURL(blob);
         link.download = `${fileName}.${fileExt}`
         link.click()
+    }
+    function onDeleteHandler(fileId: string) {
+        dispatch(deleteFile(fileId))
     }
 
     return (
@@ -97,7 +100,8 @@ const UserDisk = () => {
             </div>
             <div className={styles.files}>
                 <UserDiskItem
-                    onDownload={(id: string, fileName: string, fileExt: string) => downloadFileHandler(id, fileName, fileExt)}
+                    onDownload={onDownloadFileHandler}
+                    onDelete={onDeleteHandler}
                     onClick={setDir}
                     files={files}/>
             </div>

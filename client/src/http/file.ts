@@ -30,10 +30,17 @@ const downloadFile = (fileId: string) => file.get('file/download', {
     }
 })
 
+const deleteFile = (id: string) => file.delete('file/delete', {
+    params: {
+        id
+    }
+})
+
 export const fileAPI = {
     getFiles,
     createDir,
     createFile,
-    downloadFile
+    downloadFile,
+    deleteFile
 }
 

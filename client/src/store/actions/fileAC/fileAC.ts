@@ -39,3 +39,16 @@ export const createFile = createAsyncThunk(
         }
     }
 )
+
+export const deleteFile = createAsyncThunk(
+    FileActionTypes.DELETE_FILE,
+    async (id: string) => {
+        try {
+            const {data} = await fileAPI.deleteFile(id);
+            return id;
+        } catch (e) {
+            throw e;
+        }
+
+    }
+)
