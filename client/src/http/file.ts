@@ -23,8 +23,17 @@ const createFile = (form: FormData) => file.post('file/create', form, {
     }
 })
 
+const downloadFile = (fileId: string) => file.get('file/download', {
+    responseType: "blob",
+    params: {
+        id: fileId
+    }
+})
+
 export const fileAPI = {
     getFiles,
     createDir,
-    createFile
+    createFile,
+    downloadFile
 }
+

@@ -2,9 +2,10 @@
 
 .container {
   padding: 100px;
+
   .info, .files {
     display: grid;
-    grid-template-columns: 2fr 5fr 1fr 1fr;
+    grid-template-columns: 2fr 3fr 1fr 2fr 2fr;
     align-items: center;
     grid-auto-rows: auto;
     grid-row-gap: 20px;
@@ -12,6 +13,18 @@
       grid-column-start: 2;
       grid-column-end: 3;
     }
+
+    .date {
+      grid-column-start: 4;
+      grid-column-end: 5;
+    }
+
+    .size {
+      grid-column-start: 5;
+      grid-column-end: 6;
+    }
+
+
   }
 }
 
@@ -20,6 +33,7 @@
   width: 100%;
   margin-bottom: 50px;
   justify-content: center;
+
   * {
     justify-content: center;
     width: 250px;

@@ -74,4 +74,12 @@ export class FileService {
         }
 
     }
+
+    async downloadFile(userId, fileId) {
+        const file = await this.fileRepository.findOne({where: {user_id: userId, id: fileId}});
+        if(!file) throw new BadRequestException('File does not exist')
+        const filePath = file.path;
+        return fs.createReadStream(filePath)
+
+    }
 }

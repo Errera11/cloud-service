@@ -5,7 +5,7 @@ import {
     Get,
     Post,
     Query,
-    Req,
+    Req, StreamableFile,
     UploadedFile,
     UseInterceptors
 } from "@nestjs/common";
@@ -52,4 +52,9 @@ export class FileController {
         }
     }
 
+    @Get('download')
+    async downloadFile(@Query('id') id: string, @Req() req: Request) {
+        const file = await this.fileService.downloadFile(req.headers['user'].id, id)
+        return new StreamableFile(file)
+    }
 }

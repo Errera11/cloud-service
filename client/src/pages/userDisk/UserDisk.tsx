@@ -7,6 +7,7 @@ import UserDiskItem from "../../components/userDiskItem/userDiskItem";
 import CreateFileModal from "../../components/createFileModal/CreateFileModal";
 import {setDirectory} from "../../store/reducers/fileReducer";
 import Button from "../../components/button/Button";
+import {fileAPI} from "../../http/file";
 
 const UserDisk = () => {
     const dispatch = useAppDispatch()
@@ -74,6 +75,14 @@ const UserDisk = () => {
         setIsDrag(false)
     }
 
+    const downloadFileHandler = async (id: string, fileName: string, fileExt: string) => {
+        const {data: blob} =  await fileAPI.downloadFile(id)
+        const link = document.createElement('a')
+        link.href = URL.createObjectURL(blob);
+        link.download = `${fileName}.${fileExt}`
+        link.click()
+    }
+
     return (
         <div onDragOver={(e ) => onDragOverHandler(e)} onDragLeave={(e) => onDragLeaveHandler(e)} className={styles.container}>
             <div className={styles.interact}>
@@ -83,11 +92,12 @@ const UserDisk = () => {
             </div>
             <div className={styles.info}>
                 <div className={styles.name}>Name</div>
-                <div>Date</div>
-                <div>Size</div>
+                <div className={styles.date}>Date</div>
+                <div className={styles.size}>Size</div>
             </div>
             <div className={styles.files}>
                 <UserDiskItem
+                    onDownload={(id: string, fileName: string, fileExt: string) => downloadFileHandler(id, fileName, fileExt)}
                     onClick={setDir}
                     files={files}/>
             </div>
