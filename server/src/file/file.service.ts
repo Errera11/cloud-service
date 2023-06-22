@@ -1,4 +1,4 @@
-import {BadRequestException, forwardRef, Inject, Injectable, Req} from "@nestjs/common";
+import {BadRequestException, forwardRef, Inject, Injectable} from "@nestjs/common";
 import {InjectModel} from "@nestjs/sequelize";
 import {FileEntity} from "./File.entity";
 import {UserService} from "../user/user.service";

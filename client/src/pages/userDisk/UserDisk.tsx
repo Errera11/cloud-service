@@ -8,6 +8,7 @@ import CreateFileModal from "../../components/createFileModal/CreateFileModal";
 import {setDirectory} from "../../store/reducers/fileReducer";
 import Button from "../../components/button/Button";
 import {fileAPI} from "../../http/file";
+import Loader from "../../components/Loader/Loader";
 
 const UserDisk = () => {
     const dispatch = useAppDispatch()
@@ -88,12 +89,13 @@ const UserDisk = () => {
 
     return (
         <div onDragOver={(e ) => onDragOverHandler(e)} onDragLeave={(e) => onDragLeaveHandler(e)} className={styles.container}>
+            <Loader progress={50}/>
             <div className={styles.interact}>
                 <Button onClick={() => setIsModal(true)}>Create directory</Button>
                 <Button onClick={() => backDirStep()}>Previous directory</Button>
                 <Button onClick={() => fileInputElement.click()}>Upload File</Button>
             </div>
-            <div className={styles.info}>
+            <div id={'#w'} className={styles.info}>
                 <div className={styles.name}>Name</div>
                 <div className={styles.date}>Date</div>
                 <div className={styles.size}>Size</div>

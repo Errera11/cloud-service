@@ -1,6 +1,7 @@
 @use "../../assets/variables.module";
 
 .container {
+  top: 0;
   background: variables.$gray;
   padding: 15px;
   position: fixed;

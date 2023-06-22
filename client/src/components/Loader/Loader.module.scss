@@ -1,0 +1,26 @@
+.container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  background: rgba(188,181,138,0.9);
+  width: 100px;
+  height: 50px;
+  border-radius: 15px;
+  padding: 15px;
+  .loader {
+    position: relative;
+    .title {
+    }
+    .barBg {
+      height: 1px;
+      width: 100%;
+      background: gray;
+      position: absolute;
+    }
+    .progressBar {
+      position: absolute;
+      height: 1px;
+      background: green;
+    }
+  }
+}
