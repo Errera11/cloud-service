@@ -12,6 +12,9 @@ const Loader = () => {
     const transition = useTransition(isLoading, {
         enter: {opacity: 1},
         leave: {opacity: 0},
+        config: {
+            duration: 500
+        }
     })
 
     return (
