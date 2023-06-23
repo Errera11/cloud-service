@@ -3,6 +3,7 @@ import {FileActionTypes} from "./types";
 import {fileAPI} from "../../../http/file";
 
 
+
 export const setFiles = createAsyncThunk(
     FileActionTypes.SET_FILES,
     async (parentId: string) => {
@@ -30,9 +31,9 @@ export const createDir = createAsyncThunk(
 
 export const createFile = createAsyncThunk(
     FileActionTypes.CREATE_FILE,
-    async (form: FormData) => {
+    async ({form, onLoad, onIsLoad}: {form: FormData, onLoad: (x: number) => void, onIsLoad: Function}) => {
         try {
-            const response = await fileAPI.createFile(form)
+            const response = await fileAPI.createFile(form, onLoad, onIsLoad)
             return response.data
         } catch(e) {
             throw e

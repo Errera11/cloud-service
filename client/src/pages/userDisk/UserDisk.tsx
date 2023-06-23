@@ -5,7 +5,7 @@ import {createFile, deleteFile, setFiles} from "../../store/actions/fileAC/fileA
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import UserDiskItem from "../../components/userDiskItem/userDiskItem";
 import CreateFileModal from "../../components/createFileModal/CreateFileModal";
-import {setDirectory} from "../../store/reducers/fileReducer";
+import {setDirectory, setIsLoading, setLoaded} from "../../store/reducers/fileReducer";
 import Button from "../../components/button/Button";
 import {fileAPI} from "../../http/file";
 import Loader from "../../components/Loader/Loader";
@@ -41,6 +41,13 @@ const UserDisk = () => {
         dispatch(setDirectory(dir))
     }
 
+    const onLoad = (x: number) => {
+        dispatch(setLoaded(x))
+    }
+    const onIsLoad = (x: boolean) => {
+        if(!x) setTimeout(() => dispatch(setIsLoading(x)), 1500)
+        else dispatch(setIsLoading(x))
+    }
     const fileInputElement = document.createElement('input')
     fileInputElement.type = 'file';
     fileInputElement.addEventListener('change', (event: Event) => {
@@ -48,10 +55,7 @@ const UserDisk = () => {
         const form = new FormData()
         form.append('file', file)
         form.append('parent', currentDir)
-        dispatch(createFile(form))
-            .unwrap()
-            .then(res => console.log(res))
-            .catch(e => console.log(e));
+        dispatch(createFile({form, onLoad, onIsLoad}))
     })
 
     const [isDrag, setIsDrag] = useState(false)
@@ -61,7 +65,7 @@ const UserDisk = () => {
         const form = new FormData()
         form.append('file', e.dataTransfer.files[0])
         form.append('parent', currentDir)
-        dispatch(createFile(form))
+        dispatch(createFile({form, onLoad, onIsLoad}))
         setIsDrag(false)
     }
 
@@ -77,25 +81,27 @@ const UserDisk = () => {
     }
 
     const onDownloadFileHandler = async (id: string, fileName: string, fileExt: string) => {
-        const {data: blob} =  await fileAPI.downloadFile(id)
+        const {data: blob} = await fileAPI.downloadFile(id)
         const link = document.createElement('a')
         link.href = URL.createObjectURL(blob);
         link.download = `${fileName}.${fileExt}`
         link.click()
     }
+
     function onDeleteHandler(fileId: string) {
         dispatch(deleteFile(fileId))
     }
 
     return (
-        <div onDragOver={(e ) => onDragOverHandler(e)} onDragLeave={(e) => onDragLeaveHandler(e)} className={styles.container}>
-            <Loader progress={50}/>
+        <div onDragOver={(e) => onDragOverHandler(e)} onDragLeave={(e) => onDragLeaveHandler(e)}
+             className={styles.container}>
+            <Loader/>
             <div className={styles.interact}>
                 <Button onClick={() => setIsModal(true)}>Create directory</Button>
                 <Button onClick={() => backDirStep()}>Previous directory</Button>
                 <Button onClick={() => fileInputElement.click()}>Upload File</Button>
             </div>
-            <div id={'#w'} className={styles.info}>
+            <div className={styles.info}>
                 <div className={styles.name}>Name</div>
                 <div className={styles.date}>Date</div>
                 <div className={styles.size}>Size</div>

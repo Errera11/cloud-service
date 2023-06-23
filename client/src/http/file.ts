@@ -1,5 +1,6 @@
 import axios, {AxiosRequestConfig} from "axios";
 import {IFile} from "../store/actions/fileAC/types";
+import {setLoaded} from "../store/reducers/fileReducer";
 
 
 const file = axios.create({
@@ -17,9 +18,12 @@ const createDir = (fileName: string, parent: string | null, type: string | null)
     parent,
     type
 })
-const createFile = (form: FormData) => file.post('file/create', form, {
+
+const createFile = (form: FormData,onLoad: (x: number) => void, onIsLoad: Function) => file.post('file/create', form, {
     onUploadProgress: progressEvent => {
-        console.log(progressEvent);
+        onIsLoad(true)
+        onLoad(progressEvent.progress!)
+        if(progressEvent.progress == 1) onIsLoad(false)
     }
 })
 
