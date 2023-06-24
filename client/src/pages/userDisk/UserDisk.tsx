@@ -45,7 +45,7 @@ const UserDisk = () => {
         dispatch(setLoaded(x))
     }
     const onIsLoad = (x: boolean) => {
-        if(!x) setTimeout(() => dispatch(setIsLoading(x)), 1500)
+        if (!x) setTimeout(() => dispatch(setIsLoading(x)), 1500)
         else dispatch(setIsLoading(x))
     }
     const fileInputElement = document.createElement('input')
@@ -113,6 +113,7 @@ const UserDisk = () => {
                     onClick={setDir}
                     files={files}/>
             </div>
+
             {isModal && <CreateFileModal isActive={isModal} setIsActive={setIsModal}/>}
             {isDrag && <div className={styles.dropArea} onDrop={(event) => fileDropHandler(event)}>
                 Drop your file here!

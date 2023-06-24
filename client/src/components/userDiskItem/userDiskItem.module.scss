@@ -1,4 +1,9 @@
 @use '../../assets/variables.module';
+.cont {
+  display: grid;
+  grid-template-columns: 2fr 3fr 1fr 2fr 2fr 1fr;
+  align-items: center;
+}
 .img {
   grid-column-start: 1;
   grid-column-end: 2;
