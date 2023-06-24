@@ -32,9 +32,9 @@ export class FileController {
     }
 
     @Get('')
-    async getFiles(@Req() req: Request, @Query('parent') parentId: string): Promise<FileEntity[]> {
+    async getFiles(@Query('sort') sort, @Req() req: Request, @Query('parent') parentId: string): Promise<FileEntity[]> {
         try {
-            return await this.fileService.getFiles(req.headers['user'].id, parentId)
+            return await this.fileService.getFiles(req.headers['user'].id, parentId, sort)
         } catch (e) {
             throw e
         }

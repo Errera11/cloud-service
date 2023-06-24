@@ -39,11 +39,13 @@ export class FileService {
         }
     }
 
-    getFiles(userId, parentId) {
+    getFiles(userId, parentId, sortOptions) {
         try {
-            return this.fileRepository.findAll(parentId ?
+            console.log(sortOptions);
+            console.log('qweqeqw');
+            return this.fileRepository.findAll({order: [[sortOptions || 'id', 'ASC']], ...(parentId ?
                 {where: {parentId, user_id: userId}} :
-                {where: {user_id: userId}})
+                {where: {user_id: userId}})})
         } catch (e) {
             throw e;
         }

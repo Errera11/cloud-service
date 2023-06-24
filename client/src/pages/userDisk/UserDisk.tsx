@@ -15,17 +15,18 @@ const UserDisk = () => {
     const currentDir = useTypedSelector(state => state.file.currentDir)
     const id = useTypedSelector(state => state.user.user?.id)
     const [dirStack, setDirStack] = useState<Array<string>>([])
+    const [sort, setSort] = useState('')
 
     useEffect(() => {
         dispatch(setDirectory(id!))
     }, [])
 
     useEffect(() => {
-        dispatch(setFiles(currentDir))
+        dispatch(setFiles({parentId: currentDir, sort}))
             .unwrap()
             .then(res => console.log(res))
             .catch(e => console.log(e))
-    }, [currentDir])
+    }, [currentDir, sort])
 
     const files = useTypedSelector(state => state.file.files)
     const [isModal, setIsModal] = useState<boolean>(false)
@@ -95,6 +96,13 @@ const UserDisk = () => {
     return (
         <div onDragOver={(e) => onDragOverHandler(e)} onDragLeave={(e) => onDragLeaveHandler(e)}
              className={styles.container}>
+            <select
+                value={sort}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSort(e.target.value)} placeholder={'Sort By'}>
+                <option value={'name'}>By name</option>
+                <option value={'size'}>By date</option>
+                <option value={'createdAt'}>By size</option>
+            </select>
             <Loader/>
             <div className={styles.interact}>
                 <Button onClick={() => setIsModal(true)}>Create directory</Button>
