@@ -6,9 +6,9 @@ import {fileAPI} from "../../../http/file";
 
 export const setFiles = createAsyncThunk(
     FileActionTypes.SET_FILES,
-    async ({parentId, sort}: {parentId: string, sort: string}) => {
+    async ({parentId, sort, search}: {parentId: string, sort: string, search?: string}) => {
         try {
-            const response = await fileAPI.getFiles(parentId, sort)
+            const response = await fileAPI.getFiles(parentId, sort, search)
             return response.data
         } catch (e) {
             throw e

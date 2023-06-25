@@ -12,7 +12,7 @@ file.interceptors.request.use(config => {
     return config
 })
 
-const getFiles = (parent: string, sort: string) => file.get<IFile[]>('file', {params: {parent, sort}})
+const getFiles = (parent: string, sort: string, search?: string) => file.get<IFile[]>('file', {params: {parent, sort, search}})
 const createDir = (fileName: string, parent: string | null, type: string | null) => file.post<IFile>('file', {
     name: fileName,
     parent,

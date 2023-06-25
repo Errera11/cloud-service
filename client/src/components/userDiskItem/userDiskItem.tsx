@@ -6,6 +6,8 @@ import dirImage from './../../assets/directory.png';
 import FileMenu from "../fileMenu/FileMenu";
 import formatFileSize from "../../utils/formatFileSize";
 import {useTransition, animated} from "@react-spring/web";
+import {useTypedSelector} from "../../hooks/useTypedSelector";
+import Loader from "../../assets/Loader/Loader";
 
 const UserDiskItem: React.FC<{
     files: IFile[],
@@ -13,7 +15,7 @@ const UserDiskItem: React.FC<{
     onDelete: Function,
     onDownload?: Function
 }> = ({files, onClick, onDelete, onDownload}) => {
-
+    const {userDiskLoading} = useTypedSelector(state => state.app)
     const transition = useTransition(files, {
         from: {
             scale: 0,
@@ -21,6 +23,13 @@ const UserDiskItem: React.FC<{
         enter: {scale: 1},
         leave: {scale: 0},
     })
+
+    if(userDiskLoading) return <div className={styles.loader}>
+        <Loader />
+    </div>
+    if(!files.length) return <div className={styles.loader}>
+        There is no items yet.
+    </div>
     return transition((style, item) => {
         return <animated.div style={{...style}} className={styles.cont}>
             <div
@@ -46,4 +55,4 @@ const UserDiskItem: React.FC<{
     })
 };
 
-export default UserDiskItem;
+export default React.memo(UserDiskItem);

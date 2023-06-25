@@ -2,6 +2,7 @@ import {BadRequestException, forwardRef, Inject, Injectable} from "@nestjs/commo
 import {InjectModel} from "@nestjs/sequelize";
 import {FileEntity} from "./File.entity";
 import {UserService} from "../user/user.service";
+import {Op} from "sequelize";
 
 const path = require('path')
 const fs = require('fs')
@@ -24,7 +25,7 @@ export class FileService {
             }
             if (!fs.existsSync(filePath)) {
                 fs.mkdirSync(filePath)
-                if(file.type == 'user reg') return
+                if (file.type == 'user reg') return
                 return this.fileRepository.create({
                     user_id: file.userId,
                     path: filePath,
@@ -39,13 +40,21 @@ export class FileService {
         }
     }
 
-    getFiles(userId, parentId, sortOptions) {
+    getFiles(userId, parentId, sortOptions, searchOptions) {
         try {
-            console.log(sortOptions);
-            console.log('qweqeqw');
-            return this.fileRepository.findAll({order: [[sortOptions || 'id', 'ASC']], ...(parentId ?
-                {where: {parentId, user_id: userId}} :
-                {where: {user_id: userId}})})
+            return this.fileRepository.findAll({
+                order: [[sortOptions || 'id', 'ASC']],
+                where: {
+                    [Op.and]: {
+                        name: {
+                            [Op.like]: `%${searchOptions}%`,
+                        },
+                        ...(parentId ?
+                            {parentId, user_id: userId} :
+                            {user_id: userId}),
+                    }
+                }
+            })
         } catch (e) {
             throw e;
         }
@@ -55,7 +64,7 @@ export class FileService {
         try {
             const fileSize = Math.round(file.size / 1024)
             const user = await this.userService.findUserById(userId)
-            if(fileSize + user.usedSpace > user.diskSpace) throw new BadRequestException('Cloud is full!')
+            if (fileSize + user.usedSpace > user.diskSpace) throw new BadRequestException('Cloud is full!')
             const fileType = file.originalname.split('.').slice(-1)[0]
             const filename = file.originalname.split('.').slice(0, -1)[0]
             if (await this.fileRepository.findOne({where: {user_id: userId, name: filename}})) {
@@ -68,8 +77,15 @@ export class FileService {
             } else filePath = path.resolve(__dirname, '..', '..', 'files', userId, file.originalname)
             fs.writeFileSync(filePath, file.buffer)
             const createdFile
-                = await this.fileRepository.create({user_id: userId, path: filePath, parentId: parent, name: filename, type: fileType, size: fileSize})
-            this.userService.updateUser(userId, {usedSpace: user.usedSpace + fileSize} )
+                = await this.fileRepository.create({
+                user_id: userId,
+                path: filePath,
+                parentId: parent,
+                name: filename,
+                type: fileType,
+                size: fileSize
+            })
+            this.userService.updateUser(userId, {usedSpace: user.usedSpace + fileSize})
             return createdFile;
         } catch (e) {
             throw e;
@@ -79,7 +95,7 @@ export class FileService {
 
     async downloadFile(userId, fileId) {
         const file = await this.fileRepository.findOne({where: {user_id: userId, id: fileId}});
-        if(!file) throw new BadRequestException('File does not exist')
+        if (!file) throw new BadRequestException('File does not exist')
         const filePath = file.path;
         return fs.createReadStream(filePath)
 
@@ -87,8 +103,8 @@ export class FileService {
 
     async deleteFile(fileId) {
         const file = await this.fileRepository.findOne({where: {id: fileId}})
-        if(!file) return new BadRequestException('File does not exist')
-        if(fs.lstatSync(file.path).isDirectory) {
+        if (!file) return new BadRequestException('File does not exist')
+        if (fs.lstatSync(file.path).isDirectory) {
             fs.rmSync(file.path, {recursive: true})
         } else {
             fs.unlink(file.path)

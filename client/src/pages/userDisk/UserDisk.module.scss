@@ -1,6 +1,9 @@
 @use '../../assets/variables.module';
 
 .container {
+  .loader {
+    margin: 10px 0px;
+  }
   padding: 100px;
   .info {
     position: relative;

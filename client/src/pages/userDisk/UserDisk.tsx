@@ -8,7 +8,8 @@ import CreateFileModal from "../../components/createFileModal/CreateFileModal";
 import {setDirectory, setIsLoading, setLoaded} from "../../store/reducers/fileReducer";
 import Button from "../../components/button/Button";
 import {fileAPI} from "../../http/file";
-import Loader from "../../components/Loader/Loader";
+import {appReducer} from "../../store/reducers/appReducer";
+import Search from "../../components/search/Search";
 
 const UserDisk = () => {
     const dispatch = useAppDispatch()
@@ -16,16 +17,17 @@ const UserDisk = () => {
     const id = useTypedSelector(state => state.user.user?.id)
     const [dirStack, setDirStack] = useState<Array<string>>([])
     const [sort, setSort] = useState('')
-
     useEffect(() => {
         dispatch(setDirectory(id!))
     }, [])
 
     useEffect(() => {
-        dispatch(setFiles({parentId: currentDir, sort}))
+        dispatch(appReducer.actions.setUserDiskLoading(true))
+        dispatch(setFiles({parentId: currentDir, sort, search: ''}))
             .unwrap()
             .then(res => console.log(res))
             .catch(e => console.log(e))
+            .finally(() => dispatch(appReducer.actions.setUserDiskLoading(false)))
     }, [currentDir, sort])
 
     const files = useTypedSelector(state => state.file.files)
@@ -92,10 +94,17 @@ const UserDisk = () => {
     function onDeleteHandler(fileId: string) {
         dispatch(deleteFile(fileId))
     }
+    function onSeacrh(str: string) {
+        dispatch(setFiles({parentId: currentDir, sort, search: str}))
+    }
 
     return (
         <div onDragOver={(e) => onDragOverHandler(e)} onDragLeave={(e) => onDragLeaveHandler(e)}
              className={styles.container}>
+            <div className={styles.loader}>
+                <Search onSearch={onSeacrh} />
+            </div>
+
             <select
                 value={sort}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSort(e.target.value)} placeholder={'Sort By'}>
@@ -103,7 +112,7 @@ const UserDisk = () => {
                 <option value={'size'}>By date</option>
                 <option value={'createdAt'}>By size</option>
             </select>
-            <Loader/>
+
             <div className={styles.interact}>
                 <Button onClick={() => setIsModal(true)}>Create directory</Button>
                 <Button onClick={() => backDirStep()}>Previous directory</Button>
