@@ -4,6 +4,20 @@
   .loader {
     margin: 10px 0px;
   }
+  .viewSort {
+    margin: 25px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    * {
+      margin-left:  10px;
+    }
+    img {
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+    }
+  }
   padding: 100px;
   .info {
     position: relative;

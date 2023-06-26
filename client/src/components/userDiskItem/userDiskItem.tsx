@@ -16,6 +16,7 @@ const UserDiskItem: React.FC<{
     onDownload?: Function
 }> = ({files, onClick, onDelete, onDownload}) => {
     const {userDiskLoading} = useTypedSelector(state => state.app)
+    const {view} = useTypedSelector(state => state.file)
     const transition = useTransition(files, {
         from: {
             scale: 0,
@@ -24,12 +25,42 @@ const UserDiskItem: React.FC<{
         leave: {scale: 0},
     })
 
-    if(userDiskLoading) return <div className={styles.loader}>
-        <Loader />
+    if (userDiskLoading) return <div className={styles.loader}>
+        <Loader/>
     </div>
-    if(!files.length) return <div className={styles.loader}>
+    if (!files.length) return <div className={styles.loader}>
         There is no items yet.
     </div>
+
+    if (view === 'rect') return <div className={styles.rect}>
+        {transition((style, item) => {
+            return <animated.div style={style} className={styles.item}>
+                <div
+                    className={styles.img}>
+                    {item.type == 'dir' ?
+                        <img onClick={() => onClick(item.id)} src={dirImage}/> :
+                        <img src={fileImage}/>}
+                </div>
+                <div className={styles.info}>
+                    <div>
+                        <div className={styles.name}>
+                            {item.name}
+                        </div>
+                        <div className={styles.size}>
+                            {formatFileSize(item.size)}
+                        </div>
+                    </div>
+                    <div>
+                        <FileMenu
+                            fileType={item.type} onDelete={onDelete} onDownload={onDownload} fileId={item.id}
+                            fileName={item.name}/>
+                    </div>
+                </div>
+
+            </animated.div>
+        })}
+    </div>
+
     return transition((style, item) => {
         return <animated.div style={{...style}} className={styles.cont}>
             <div

@@ -3,7 +3,8 @@ export interface IFilesInitialState {
     currentDir: string,
     error: string,
     loaded: number,
-    isLoading: boolean
+    isLoading: boolean,
+    view: 'rect' | 'list'
 }
 
 export interface IFile {

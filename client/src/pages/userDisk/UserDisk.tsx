@@ -5,15 +5,17 @@ import {createFile, deleteFile, setFiles} from "../../store/actions/fileAC/fileA
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import UserDiskItem from "../../components/userDiskItem/userDiskItem";
 import CreateFileModal from "../../components/createFileModal/CreateFileModal";
-import {setDirectory, setIsLoading, setLoaded} from "../../store/reducers/fileReducer";
+import {setDirectory, setIsLoading, setLoaded, setView} from "../../store/reducers/fileReducer";
 import Button from "../../components/button/Button";
 import {fileAPI} from "../../http/file";
 import {appReducer} from "../../store/reducers/appReducer";
 import Search from "../../components/search/Search";
+import listView from '../../assets/listView.png'
+import rectView from '../../assets/rectView.png'
 
 const UserDisk = () => {
     const dispatch = useAppDispatch()
-    const currentDir = useTypedSelector(state => state.file.currentDir)
+    const {currentDir} = useTypedSelector(state => state.file)
     const id = useTypedSelector(state => state.user.user?.id)
     const [dirStack, setDirStack] = useState<Array<string>>([])
     const [sort, setSort] = useState('')
@@ -104,15 +106,17 @@ const UserDisk = () => {
             <div className={styles.loader}>
                 <Search onSearch={onSeacrh} />
             </div>
-
-            <select
-                value={sort}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSort(e.target.value)} placeholder={'Sort By'}>
-                <option value={'name'}>By name</option>
-                <option value={'size'}>By date</option>
-                <option value={'createdAt'}>By size</option>
-            </select>
-
+            <div className={styles.viewSort}>
+                <select
+                    value={sort}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSort(e.target.value)} placeholder={'Sort By'}>
+                    <option value={'name'}>By name</option>
+                    <option value={'size'}>By date</option>
+                    <option value={'createdAt'}>By size</option>
+                </select>
+                <img onClick={() => dispatch(setView('list'))} src={listView} />
+                <img onClick={() => dispatch(setView('rect'))} src={rectView} />
+            </div>
             <div className={styles.interact}>
                 <Button onClick={() => setIsModal(true)}>Create directory</Button>
                 <Button onClick={() => backDirStep()}>Previous directory</Button>

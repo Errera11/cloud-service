@@ -7,7 +7,8 @@ const initialState: IFilesInitialState = {
     currentDir: '',
     error: '',
     loaded: 0,
-    isLoading: false
+    isLoading: false,
+    view: 'list'
 }
 
 export const fileSlice = createSlice(
@@ -15,6 +16,9 @@ export const fileSlice = createSlice(
         initialState,
         name: 'file',
         reducers: {
+            setView: (state, action: PayloadAction<'rect' | 'list'>) => {
+                state.view = action.payload
+            },
             setDirectory: (state, action: PayloadAction<string>) => {
                 state.currentDir = action.payload
             },
@@ -47,4 +51,4 @@ export const fileSlice = createSlice(
     }
 )
 
-export const {setDirectory, setLoaded, setIsLoading} = fileSlice.actions
+export const {setView, setDirectory, setLoaded, setIsLoading} = fileSlice.actions
