@@ -1,10 +1,21 @@
-import {forwardRef, HttpException, HttpStatus, Inject, Injectable, UnauthorizedException} from "@nestjs/common";
+import {
+    BadRequestException,
+    forwardRef,
+    HttpException,
+    HttpStatus,
+    Inject,
+    Injectable,
+    InternalServerErrorException,
+    UnauthorizedException
+} from "@nestjs/common";
 import {UserEntity} from "./User.entity";
 import {v4 as uuidv4} from 'uuid';
 import {InjectModel} from "@nestjs/sequelize";
 import {TokenService} from "../token/token.service";
 import * as bcrypt from 'bcrypt'
 import {FileService} from "../file/file.service";
+import path from 'path';
+import fs from 'fs'
 
 type IAuthProps = {
     status: number
@@ -64,6 +75,25 @@ export class UserService {
 
     updateUser(id, data) {
         return this.userRepository.update({...data}, {where: {id}, returning: true})
+    }
+
+    async uploadUserImage(id, image) {
+        try {
+            const imageName = uuidv4()
+            const staticPath = path.join(...process.env.STATIC_PATH.split('/'))
+            const imagePath = path.join(staticPath, imageName)
+            await this.userRepository.update({image: imageName}, {where: {id}})
+            if(!fs.existsSync(imagePath)) {
+                fs.writeSync(image.buffer, imagePath)
+            } else {
+                throw new BadRequestException()
+            }
+            return
+        } catch (e) {
+            return new InternalServerErrorException()
+        }
+
+
     }
 
 }

@@ -5,7 +5,8 @@ import {useNavigate} from "react-router-dom";
 import {routes} from "../appRouter/routeConstants";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {userSlice} from "../../store/reducers/userReducer";
-import {useAppDispatch} from "../../hooks/useAppDispatch";
+import {useAppDispatch} from "../../hooks/useAppDispatch"
+import listView from '../../assets/listView.png';
 
 const Navbar = () => {
     const navigate = useNavigate()
@@ -20,6 +21,10 @@ const Navbar = () => {
             <div className={styles.auth}>
                 {isAuth ?
                     <>
+                        <div className={styles.image}>
+                            {user?.image ? <img src={user.image} /> :
+                                <img src={listView}/>}
+                        </div>/
                         <div>{user?.email}</div>
                         <Button onClick={() => dispatch(logOut())}>Log Out</Button>
                     </>

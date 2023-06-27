@@ -6,7 +6,7 @@ const Home = () => {
     console.log(x);
     return (
         <div>
-            Hello Home
+
         </div>
     );
 };
