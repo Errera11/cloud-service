@@ -2,17 +2,15 @@ import {
     Body,
     Controller,
     Get,
-    HttpException,
-    HttpStatus,
     Post,
     Headers,
     UseInterceptors,
     Req,
-    UploadedFile, UploadedFiles
+    UploadedFiles, Delete
 } from "@nestjs/common";
 import {CreateUserDto} from "./types/userTypes";
 import {UserService} from "./user.service";
-import {FileFieldsInterceptor, FileInterceptor} from "@nestjs/platform-express";
+import {FileFieldsInterceptor} from "@nestjs/platform-express";
 
 
 @Controller('/user')
@@ -58,6 +56,15 @@ export class UserController {
         } catch(e) {
             console.log(e);
             throw e;
+        }
+    }
+
+    @Delete('deleteImage')
+    async deleteImage(@Req() req: Request) {
+        try {
+            return await this.userService.deleteImage(req.headers['user'].id)
+        } catch(e) {
+            throw e
         }
     }
 }

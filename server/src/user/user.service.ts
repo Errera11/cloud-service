@@ -93,7 +93,19 @@ export class UserService {
             console.log(e);
             throw new InternalServerErrorException()
         }
+    }
 
+    async deleteImage(id) {
+        try {
+            const user = await this.userRepository.findOne({where: {id}})
+            fs.unlinkSync(path.join(...process.env.STATIC_PATH.split('/'), user.image))
+            user.update({image: ''}, {where: {id}})
+            user.save()
+            return user
+        } catch(e) {
+            console.log(e);
+            throw new InternalServerErrorException()
+        }
 
     }
 

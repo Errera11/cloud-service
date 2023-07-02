@@ -30,7 +30,11 @@ const uploadImage = (file: FormData) => {
     return auth.post<string>('/user/image', file, {headers: {'authorization': localStorage.getItem('token')}})
 }
 
+const deleteImage = () => {
+    return auth.delete('/user/deleteImage', {headers: {'authorization': localStorage.getItem('token')}})
+}
+
 export default {
-    signIn, signUp, tokenAuth, uploadImage
+    signIn, signUp, tokenAuth, uploadImage, deleteImage
 }
 

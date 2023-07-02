@@ -50,3 +50,9 @@ export const uploadImage = createAsyncThunk(userActionTypes.SET_USER_IMAGE,
         const {data} = await Auth.uploadImage(file)
         return data
     })
+
+export const deleteImage = createAsyncThunk(userActionTypes.DELETE_USER_IMAGE,
+    async () => {
+        const {data} = await Auth.deleteImage()
+        return data
+    })

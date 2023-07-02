@@ -16,5 +16,6 @@ export interface IInitialState {
 export enum userActionTypes {
     SET_USER = 'SET_USER',
     SET_ERROR = 'SET_ERROR',
-    SET_USER_IMAGE = 'SET_USER_IMAGE'
+    SET_USER_IMAGE = 'SET_USER_IMAGE',
+    DELETE_USER_IMAGE = 'DELETE_USER_IMAGE'
 }
