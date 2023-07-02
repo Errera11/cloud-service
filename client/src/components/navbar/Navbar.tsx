@@ -15,17 +15,17 @@ const Navbar = () => {
     const dispatch = useAppDispatch()
     return (
         <div className={styles.container}>
-            <div className={styles.home} onClick={() => navigate(routes.HOME)}>
+            <div className={styles.disk} onClick={() => navigate(routes.DISK)}>
                 Cloud
             </div>
             <div className={styles.auth}>
                 {isAuth ?
                     <>
-                        <div className={styles.image}>
-                            {user?.image ? <img src={user.image} /> :
+                        <div style={{cursor: 'pointer'}} onClick={() => navigate(routes.HOME)}>{user?.email}</div>
+                        <div>
+                            {user?.image ? <img src={process.env.REACT_APP_API_URL + '/' + user.image} /> :
                                 <img src={listView}/>}
-                        </div>/
-                        <div>{user?.email}</div>
+                        </div>
                         <Button onClick={() => dispatch(logOut())}>Log Out</Button>
                     </>
                     :

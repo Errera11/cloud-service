@@ -1,7 +1,18 @@
-import {Body, Controller, Get, HttpException, HttpStatus, Post, Headers, UseInterceptors, Req} from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Get,
+    HttpException,
+    HttpStatus,
+    Post,
+    Headers,
+    UseInterceptors,
+    Req,
+    UploadedFile, UploadedFiles
+} from "@nestjs/common";
 import {CreateUserDto} from "./types/userTypes";
 import {UserService} from "./user.service";
-import {FileInterceptor} from "@nestjs/platform-express";
+import {FileFieldsInterceptor, FileInterceptor} from "@nestjs/platform-express";
 
 
 @Controller('/user')
@@ -40,11 +51,12 @@ export class UserController {
     }
 
     @Post('image')
-    @UseInterceptors(FileInterceptor('file'))
-    async uploadUserImage(@Body() dto: {image: string}, @Req() req: Request) {
+    @UseInterceptors(FileFieldsInterceptor([{name: 'file', maxCount: 1}]))
+    async uploadUserImage(@UploadedFiles() dto: {file: File}, @Req() req: Request) {
         try {
-            return await this.userService.uploadUserImage(dto.image, req.headers['user'].id)
+            return await this.userService.uploadUserImage(req.headers['user'].id, dto.file[0])
         } catch(e) {
+            console.log(e);
             throw e;
         }
     }

@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {IInitialState, IUser} from "../actions/userAC/types";
-import {auth, signIn, signUp} from "../actions/userAC/userAC";
+import {auth, signIn, signUp, uploadImage} from "../actions/userAC/userAC";
 
 const initialState: IInitialState = {
     error: '',
@@ -28,6 +28,9 @@ export const userSlice = createSlice(
             builder.addCase(signIn.rejected || signUp.rejected || auth.rejected, (state, action) => {
                 localStorage.removeItem('token')
                 state.error = String(action.error.message);
+            })
+            builder.addCase(uploadImage.fulfilled, (state, action) => {
+                state.user!.image = action.payload
             })
         }
     }

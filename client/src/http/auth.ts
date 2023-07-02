@@ -1,4 +1,4 @@
-import axios, {AxiosError, AxiosResponse} from "axios";
+import axios from "axios";
 import {IUser} from "../store/actions/userAC/types";
 
 const auth = axios.create({
@@ -26,8 +26,11 @@ const tokenAuth = () => {
     return auth.get<IResponse>('/user/auth', {headers: {'authorization': localStorage.getItem('token')}})
 }
 
-export default {
-    signIn, signUp, tokenAuth
+const uploadImage = (file: FormData) => {
+    return auth.post<string>('/user/image', file, {headers: {'authorization': localStorage.getItem('token')}})
 }
 
-//TODO interceptors
+export default {
+    signIn, signUp, tokenAuth, uploadImage
+}
+

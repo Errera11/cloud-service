@@ -14,8 +14,8 @@ import {InjectModel} from "@nestjs/sequelize";
 import {TokenService} from "../token/token.service";
 import * as bcrypt from 'bcrypt'
 import {FileService} from "../file/file.service";
-import path from 'path';
-import fs from 'fs'
+import * as path from 'path';
+import * as fs from 'fs'
 
 type IAuthProps = {
     status: number
@@ -82,15 +82,16 @@ export class UserService {
             const imageName = uuidv4()
             const staticPath = path.join(...process.env.STATIC_PATH.split('/'))
             const imagePath = path.join(staticPath, imageName)
-            await this.userRepository.update({image: imageName}, {where: {id}})
             if(!fs.existsSync(imagePath)) {
-                fs.writeSync(image.buffer, imagePath)
+                fs.writeFileSync(imagePath, image.buffer)
             } else {
                 throw new BadRequestException()
             }
-            return
+            await this.userRepository.update({image: imageName}, {where: {id}})
+            return imageName;
         } catch (e) {
-            return new InternalServerErrorException()
+            console.log(e);
+            throw new InternalServerErrorException()
         }
 
 

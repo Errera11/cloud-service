@@ -9,6 +9,7 @@ export enum routes {
     SIGN_IN = '/signIn',
     SIGN_UP = '/signUp',
     HOME = '/',
+    DISK = '/disk'
 }
 
 export const publicRoutes = [
@@ -18,6 +19,7 @@ export const publicRoutes = [
 ]
 
 export const privateRoutes = [
-    {path: routes.HOME, element: <UserDisk />},
+    {path: routes.HOME, element: <Home />},
+    {path: routes.DISK, element: <UserDisk />},
     {path: '/*', element: <Navigate to={routes.HOME}/>},
 ]

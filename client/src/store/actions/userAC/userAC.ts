@@ -43,3 +43,10 @@ export const auth = createAsyncThunk(userActionTypes.SET_USER,
             throw error.response.data.message
         })
     })
+
+
+export const uploadImage = createAsyncThunk(userActionTypes.SET_USER_IMAGE,
+    async (file: FormData) => {
+        const {data} = await Auth.uploadImage(file)
+        return data
+    })
