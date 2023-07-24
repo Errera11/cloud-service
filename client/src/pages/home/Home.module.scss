@@ -1,0 +1,26 @@
+.container {
+  width: 30%;
+  border: solid white;
+  border-radius: 5px;
+  margin-left: 30px;
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  align-items: center;
+  * {
+    margin: 10px 0px;
+  }
+
+  input {
+    display: flex;
+    padding: 15px;
+    border: none;
+    background: none;
+    &:hover {
+      background: black;
+      color: white;
+      transition-duration: 500ms;
+    }
+  }
+}
